@@ -19,10 +19,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
         http.csrf().disable()
             .authorizeHttpRequests()
-            .requestMatchers(HttpMethod.POST, "/api/users").permitAll() // Autorise POST
-            .requestMatchers(HttpMethod.GET, "/api/users").permitAll() // Autorise GET
-            .requestMatchers(HttpMethod.PUT, "/api/users/**").permitAll() // Autorise PUT
-            .requestMatchers(HttpMethod.DELETE, "/api/users/**").permitAll() // Autorise DELETE
+            .requestMatchers(HttpMethod.POST, "/api/**").permitAll() // Autorise POST
+            .requestMatchers(HttpMethod.GET, "/api/**").permitAll() // Autorise GET
+            .requestMatchers(HttpMethod.PUT, "/api/**").permitAll() // Autorise PUT
+            .requestMatchers(HttpMethod.DELETE, "/api/**").permitAll() // Autorise DELETE
             .anyRequest().authenticated()
             .and()
             .sessionManagement()
