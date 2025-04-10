@@ -20,7 +20,9 @@ public class SecurityConfig {
         http.csrf().disable()
             .authorizeHttpRequests()
             .requestMatchers(HttpMethod.POST, "/api/users").permitAll() // Autorise POST
-            .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll() // Autorise GET
+            .requestMatchers(HttpMethod.GET, "/api/users").permitAll() // Autorise GET
+            .requestMatchers(HttpMethod.PUT, "/api/users/**").permitAll() // Autorise PUT
+            .requestMatchers(HttpMethod.DELETE, "/api/users/**").permitAll() // Autorise DELETE
             .anyRequest().authenticated()
             .and()
             .sessionManagement()
