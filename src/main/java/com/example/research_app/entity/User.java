@@ -1,0 +1,24 @@
+package com.example.research_app.entity;
+
+import lombok.Data;
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
+@Data
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id_user;
+    private String nom;
+    private String email;
+    private String grade;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Contribution> contributions;
+}
