@@ -35,7 +35,7 @@ public ResponseEntity<?> login(@RequestBody AuthRequest request) {
     }
 }
 }
-//authrequestchange
+//authentificationrequest
 class AuthRequest {
     private String email;
     private String password;
