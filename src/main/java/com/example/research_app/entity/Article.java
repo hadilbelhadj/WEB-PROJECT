@@ -2,6 +2,7 @@ package com.example.research_app.entity;
 
 import lombok.Data;
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private String titre;
     private String mots_cles;
 
@@ -19,5 +21,6 @@ public class Article {
     private Domaine domaine;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @JsonIgnore // Empêche la sérialisation des contributions
     private List<Contribution> contributions;
 }
