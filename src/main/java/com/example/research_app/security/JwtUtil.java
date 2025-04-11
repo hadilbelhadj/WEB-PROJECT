@@ -13,7 +13,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    // Clé sécurisée générée automatiquement (256 bits)
+    // Clé sécurisée générée automatiquementt
     private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 heures
 
