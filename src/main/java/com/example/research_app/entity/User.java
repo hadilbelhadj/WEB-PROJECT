@@ -11,9 +11,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_user;
+
     private String nom;
     private String email;
     private String grade;
+    private String password; 
 
     @ManyToOne
     @JoinColumn(name = "role_id")

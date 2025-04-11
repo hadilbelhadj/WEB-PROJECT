@@ -3,6 +3,8 @@ package com.example.research_app.controller;
 import com.example.research_app.security.JwtUtil;
 import com.example.research_app.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -21,22 +23,36 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public String login(@RequestBody AuthRequest request) {
+public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+    try {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-        return jwtUtil.generateToken(userDetails.getUsername());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+        return ResponseEntity.ok(jwtUtil.generateToken(userDetails.getUsername()));
+    } catch (BadCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }
+}
 }
 
 class AuthRequest {
-    private String username;
+    private String email;
     private String password;
 
-    // Getters et setters
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
