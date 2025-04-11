@@ -42,7 +42,7 @@ public class ArticleController {
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+ // suppression 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
         if (articleService.findArticleById(id).isPresent()) {
