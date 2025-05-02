@@ -13,7 +13,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    // Clé sécurisée générée automatiquementt
+    // Clé sécurisée générée automatiquement (256 bits)
     private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 heures
 
@@ -38,13 +38,15 @@ public class JwtUtil {
                 .getBody();
     }
 
-    public String generateToken(String username) {
+    public String generateToken(Long userId, String username, String role) {
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
-                .compact();
+        .setSubject(username)
+        .claim("id", userId)
+        .claim("role", role)
+        .setIssuedAt(new Date(System.currentTimeMillis()))
+        .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+        .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
+        .compact();
     }
 
     public Boolean validateToken(String token, String username) {

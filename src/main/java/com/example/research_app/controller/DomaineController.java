@@ -31,16 +31,21 @@ public class DomaineController {
         return domaineService.saveDomaine(domaine);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Domaine> updateDomaine(@PathVariable Long id, @RequestBody Domaine domaineDetails) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Domaine> updateDomainePartially(@PathVariable Long id, @RequestBody Domaine domaineDetails) {
         return domaineService.findDomaineById(id)
                 .map(domaine -> {
-                    domaine.setNom_domaine(domaineDetails.getNom_domaine());
-                    domaine.setType(domaineDetails.getType());
+                    if (domaineDetails.getNom_domaine() != null) {
+                        domaine.setNom_domaine(domaineDetails.getNom_domaine());
+                    }
+                    if (domaineDetails.getType() != null) {
+                        domaine.setType(domaineDetails.getType());
+                    }
                     return ResponseEntity.ok(domaineService.saveDomaine(domaine));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+    
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDomaine(@PathVariable Long id) {

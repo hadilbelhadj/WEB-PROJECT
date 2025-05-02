@@ -1,7 +1,10 @@
 package com.example.research_app.controller;
-
+import com.example.research_app.entity.User;
 import com.example.research_app.security.JwtUtil;
 import com.example.research_app.service.MyUserDetailsService;
+
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +31,12 @@ public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-        return ResponseEntity.ok(jwtUtil.generateToken(userDetails.getUsername()));
+        User user = userDetailsService.getUserByEmail(request.getEmail()); // méthode à ajouter
+        String role = user.getRole().getRole(); // ou getRoles().stream().findFirst().get().getName() si plusieurs
+        String token = jwtUtil.generateToken(user.getId_user()
+        , user.getEmail(), role);
+        return ResponseEntity.ok(Map.of("token", token));
+        
     } catch (BadCredentialsException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
     }

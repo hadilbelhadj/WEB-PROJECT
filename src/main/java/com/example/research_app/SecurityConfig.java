@@ -3,6 +3,7 @@ package com.example.research_app;
 import com.example.research_app.security.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,7 +27,10 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Désactive CSRF pour les API REST
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**").permitAll() // Autorise tout sur /auth/
-                .requestMatchers("/api/**").permitAll() // Autorise tout sur /api/ (à ajuster selon besoins)
+                .requestMatchers(HttpMethod.GET, "/api/articles/**").permitAll() 
+                .requestMatchers("/api/articles/**").hasAnyRole("ADMIN", "CONTRIBUTOR") 
+                .requestMatchers("/api/users/me").hasAnyRole("USER", "ADMIN") // Accès au profil personnel autorisé
+                .requestMatchers("/api/users/**").hasRole("ADMIN") // CRUD utilisateurs réservé à l'admin
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

@@ -1,5 +1,6 @@
 package com.example.research_app.controller;
-
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import com.example.research_app.entity.User;
 import com.example.research_app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,4 +57,27 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
+
+@GetMapping("/me")
+@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+public ResponseEntity<User> getMyProfile(Authentication authentication) {
+    String email = authentication.getName(); // username = email ici
+    return userService.findByEmail(email)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
+}
+
+@PutMapping("/me")
+@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+public ResponseEntity<User> updateMyProfile(Authentication authentication, @RequestBody User userDetails) {
+    String email = authentication.getName();
+    return userService.findByEmail(email)
+            .map(user -> {
+                user.setNom(userDetails.getNom());
+                user.setGrade(userDetails.getGrade());
+                // NE PAS autoriser modification de l'email ou du rôle ici
+                return ResponseEntity.ok(userService.saveUser(user));
+            })
+            .orElse(ResponseEntity.notFound().build());
+}
 }

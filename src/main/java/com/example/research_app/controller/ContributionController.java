@@ -25,25 +25,36 @@ public class ContributionController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-//createcontribution
+
     @PostMapping
     public Contribution createContribution(@RequestBody Contribution contribution) {
         return contributionService.saveContribution(contribution);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Contribution> updateContribution(@PathVariable Long id, @RequestBody Contribution contributionDetails) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Contribution> updateContributionPartially(@PathVariable Long id, @RequestBody Contribution contributionDetails) {
         return contributionService.findContributionById(id)
                 .map(contribution -> {
-                    contribution.setType(contributionDetails.getType());
-                    contribution.setDate(contributionDetails.getDate());
-                    contribution.setLieu(contributionDetails.getLieu());
-                    contribution.setUser(contributionDetails.getUser());
-                    contribution.setArticle(contributionDetails.getArticle());
+                    if (contributionDetails.getType() != null) {
+                        contribution.setType(contributionDetails.getType());
+                    }
+                    if (contributionDetails.getDate() != null) {
+                        contribution.setDate(contributionDetails.getDate());
+                    }
+                    if (contributionDetails.getLieu() != null) {
+                        contribution.setLieu(contributionDetails.getLieu());
+                    }
+                    if (contributionDetails.getUser() != null) {
+                        contribution.setUser(contributionDetails.getUser());
+                    }
+                    if (contributionDetails.getArticle() != null) {
+                        contribution.setArticle(contributionDetails.getArticle());
+                    }
                     return ResponseEntity.ok(contributionService.saveContribution(contribution));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+    
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContribution(@PathVariable Long id) {

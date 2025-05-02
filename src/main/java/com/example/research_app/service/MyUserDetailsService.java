@@ -1,8 +1,8 @@
 package com.example.research_app.service;
-
 import com.example.research_app.entity.User;
 import com.example.research_app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 import java.util.Collections;
@@ -19,9 +19,16 @@ public class MyUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                Collections.emptyList() // Pas de rôles pour l'instant
-        );
+        user.getEmail(),
+        user.getPassword(),
+        Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getRole()))
+    );
+
     }
+    
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+    }
+    
 }

@@ -31,15 +31,18 @@ public class RoleController {
         return roleService.saveRole(role);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Role> updateRole(@PathVariable Long id, @RequestBody Role roleDetails) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<Role> updateRolePartially(@PathVariable Long id, @RequestBody Role roleDetails) {
         return roleService.findRoleById(id)
                 .map(role -> {
-                    role.setRole(roleDetails.getRole());
+                    if (roleDetails.getRole() != null) {
+                        role.setRole(roleDetails.getRole());
+                    }
                     return ResponseEntity.ok(roleService.saveRole(role));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+    
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {

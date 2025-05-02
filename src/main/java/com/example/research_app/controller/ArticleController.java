@@ -4,6 +4,7 @@ import com.example.research_app.entity.Article;
 import com.example.research_app.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,24 +26,31 @@ public class ArticleController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
+@PreAuthorize("hasAnyRole('CONTRIBUTER', 'ADMIN')")
     @PostMapping
     public Article createArticle(@RequestBody Article article) {
         return articleService.saveArticle(article);
     }
-
-    @PutMapping("/{id}")
+@PreAuthorize("hasAnyRole('CONTRIBUTER', 'ADMIN')")
+    @PatchMapping("/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article articleDetails) {
         return articleService.findArticleById(id)
                 .map(article -> {
-                    article.setTitre(articleDetails.getTitre());
-                    article.setMots_cles(articleDetails.getMots_cles());
-                    article.setDomaine(articleDetails.getDomaine());
+                    if (articleDetails.getTitre() != null) {
+                        article.setTitre(articleDetails.getTitre());
+                    }
+                    if (articleDetails.getMots_cles() != null) {
+                        article.setMots_cles(articleDetails.getMots_cles());
+                    }
+                    if (articleDetails.getDomaine() != null) {
+                        article.setDomaine(articleDetails.getDomaine());
+                    }
                     return ResponseEntity.ok(articleService.saveArticle(article));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
- // suppression 
+    
+@PreAuthorize("hasAnyRole('CONTRIBUTER', 'ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
         if (articleService.findArticleById(id).isPresent()) {
