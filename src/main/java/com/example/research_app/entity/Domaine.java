@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Data
 public class Domaine {
@@ -14,6 +16,9 @@ public class Domaine {
     private String nom_domaine;
     private String type; // Par exemple, "nlp", "image", "cybersécurité"
 
-    @OneToMany(mappedBy = "domaine")
+    @OneToMany(mappedBy = "domaine", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Article> articles;
+
+
 }

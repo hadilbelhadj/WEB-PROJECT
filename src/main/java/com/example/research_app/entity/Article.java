@@ -2,6 +2,8 @@ package com.example.research_app.entity;
 
 import lombok.Data;
 import jakarta.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
@@ -18,7 +20,9 @@ public class Article {
 
     @ManyToOne
     @JoinColumn(name = "domaine_id")
+    @JsonBackReference
     private Domaine domaine;
+
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     @JsonIgnore // Empêche la sérialisation des contributions
