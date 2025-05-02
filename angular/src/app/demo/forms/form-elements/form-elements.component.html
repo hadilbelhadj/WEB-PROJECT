@@ -1,87 +1,106 @@
+
+
 <form (ngSubmit)="onSubmit()" #userForm="ngForm">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <div class="input-group">
-          <span class="input-group-text">&#64;</span>
-          <!-- Utilisation correcte de @ -->
+  <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <div class="input-group">
+            <span class="input-group-text">&#64;</span>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="nom"
+              [(ngModel)]="user.nom"
+              placeholder="Enter username"
+              required
+            />
+          </div>
+        </div>
+  
+        <div class="form-group">
+          <label for="email">Email address</label>
           <input
-            type="text"
+            type="email"
             class="form-control"
-            id="username"
-            name="nom"
-            [(ngModel)]="user.nom"
-            placeholder="Enter username"
+            id="email"
+            name="email"
+            [(ngModel)]="user.email"
+            placeholder="Enter email"
+            required
+          />
+        </div>
+  
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            [(ngModel)]="user.password"
+            placeholder="Enter password"
             required
           />
         </div>
       </div>
-
-      <div class="form-group">
-        <label for="email">Email address</label>
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          name="email"
-          [(ngModel)]="user.email"
-          placeholder="Enter email"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          id="password"
-          name="password"
-          [(ngModel)]="user.password"
-          placeholder="Enter password"
-          required
-        />
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="grade">Grade</label>
-        <select
-          class="form-control"
-          id="grade"
-          name="grade"
-          [(ngModel)]="user.grade"
-          required
-        >
-          <option value="" disabled>Select grade</option>
-          <option value="Admin">Admin</option>
-          <option value="Moderator">Moderator</option>
-          <option value="Researcher">Researcher</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="role">Role</label>
-        <input
-          type="text"
-          class="form-control"
-          id="role"
-          name="role"
-          [(ngModel)]="user.role"
-          placeholder="Enter role"
-          required
-        />
+  
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="grade">Grade</label>
+          <select
+            class="form-control"
+            id="grade"
+            name="grade"
+            [(ngModel)]="user.grade"
+            required
+          >
+            <option value="" disabled>Select grade</option>
+            <option value="Professeur">Professeur</option>
+            <option value="Assistant">Assistant</option>
+            <option value="Chercheur">Chercheur</option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label for="role">Role</label>
+          <select
+            class="form-control"
+            id="role"
+            name="role"
+            [(ngModel)]="user.role"
+            required
+          >
+            <option *ngFor="let r of roles" [ngValue]="r">{{ r.role }}</option>
+          </select>
+        </div>
       </div>
     </div>
-  </div>
-
+  
+    <button
+      type="submit"
+      class="btn btn-primary mt-3"
+      [disabled]="!userForm.valid"
+    >
+      Add User
+    </button>
+  </form>
   <button
     type="submit"
     class="btn btn-primary mt-3"
     [disabled]="!userForm.valid"
   >
     Add User
+  </button>
+  
+  <!-- Bouton de déconnexion -->
+  <button
+    type="button"
+    class="btn btn-danger mt-3 ml-3"
+    (click)="logout()"
+  >
+    Logout
   </button>
 </form>
