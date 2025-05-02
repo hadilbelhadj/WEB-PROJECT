@@ -1,0 +1,39 @@
+.article-list-container {
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 20px;
+    color: #3f51b5;
+  }
+
+  .actions {
+    margin-bottom: 20px;
+  }
+
+  .article-title {
+    color: #3f51b5;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .status-published {
+    color: #4caf50;
+    font-weight: 500;
+  }
+
+  .status-draft {
+    color: #ff9800;
+    font-weight: 500;
+  }
+
+  .status-review {
+    color: #2196f3;
+    font-weight: 500;
+  }
+
+  table {
+    width: 100%;
+  }
+}

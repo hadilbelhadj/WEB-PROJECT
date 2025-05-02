@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import { ContributorGuard } from "./guards/contributor.guard";
 
 export const routes: Routes = [
   {
@@ -18,6 +19,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import("./demo/forms/form-elements/form-elements.component").then(
         (m) => m.FormElementsComponent
+      ),
+  },
+  {
+    path: "article-form",
+    canActivate: [ContributorGuard], // 🔐 Ajout de la protection
+    loadComponent: () =>
+      import("./demo/article/article-form/article-form.component").then(
+        (m) => m.ArticleFormComponent
       ),
   },
   {

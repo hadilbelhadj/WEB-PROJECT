@@ -1,18 +1,31 @@
-import { HttpInterceptorFn } from "@angular/common/http";
+// src/app/interceptor/auth-interceptor.interceptor.ts
+
+import {
+  HttpInterceptorFn,
+  HttpRequest,
+  HttpHandlerFn,
+  HttpEvent,
+} from "@angular/common/http";
 import { inject } from "@angular/core";
-import { AuthService } from "../app/services/auth.service"; // 👈 correct path
+import { Observable } from "rxjs";
+import { AuthService } from "../app/services/auth.service";
 
-export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService); // ✅ correctly typed
-  const authToken = authService.getToken(); // ✅ method must exist in AuthService
+export const AuthInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> => {
+  const authService = inject(AuthService); // ✅ pas de typage nécessaire ici
 
-  const authReq = authToken
-    ? req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
-    : req;
+  const token = authService.getToken(); // ✅ méthode dans AuthService
 
-  return next(authReq);
+  if (token) {
+    const cloned = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return next(cloned);
+  }
+
+  return next(req);
 };

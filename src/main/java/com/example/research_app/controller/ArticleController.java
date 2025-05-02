@@ -26,12 +26,12 @@ public class ArticleController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-@PreAuthorize("hasAnyRole('CONTRIBUTER', 'ADMIN')")
+@PreAuthorize("hasAnyRole('CONTRIBUTOR', 'ADMIN')")
     @PostMapping
     public Article createArticle(@RequestBody Article article) {
         return articleService.saveArticle(article);
     }
-@PreAuthorize("hasAnyRole('CONTRIBUTER', 'ADMIN')")
+@PreAuthorize("hasAnyRole('CONTRIBUTOR', 'ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article articleDetails) {
         return articleService.findArticleById(id)
@@ -50,7 +50,7 @@ public class ArticleController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
     
-@PreAuthorize("hasAnyRole('CONTRIBUTER', 'ADMIN')")
+@PreAuthorize("hasAnyRole('CONTRIBUTOR', 'ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
         if (articleService.findArticleById(id).isPresent()) {

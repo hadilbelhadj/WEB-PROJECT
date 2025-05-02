@@ -5,6 +5,7 @@ import { Routes, RouterModule } from "@angular/router";
 // project import
 import { AdminComponent } from "./theme/layout/admin/admin.component";
 import { GuestComponent } from "./theme/layout/guest/guest.component";
+import { ContributorGuard } from "./guards/contributor.guard"; // 🔐 Ajout du guard
 
 const routes: Routes = [
   {
@@ -49,15 +50,14 @@ const routes: Routes = [
         loadComponent: () =>
           import("./demo/other/sample-page/sample-page.component"),
       },
+
       {
-        path: "user-publish",
+        path: "article-form", // 🔥 NOUVELLE ROUTE
+        canActivate: [ContributorGuard], // 🔐 Sécurisé par le rôle
         loadComponent: () =>
-          import("./demo/pages/user/user-publish/user-publish.component"),
-      },
-      {
-        path: "contributor-articles",
-        loadComponent: () =>
-          import("./demo/pages/contributor/contributor-articles/contributor-articles.component"),
+          import("./demo/article/article-form/article-form.component").then(
+            (m) => m.ArticleFormComponent
+          ),
       },
     ],
   },

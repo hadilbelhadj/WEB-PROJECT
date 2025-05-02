@@ -1,0 +1,63 @@
+<form (ngSubmit)="onSubmit()" #articleForm="ngForm">
+  <div class="row">
+    <!-- Partie gauche : titre et mots clés -->
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="titre">Titre de l'article</label>
+        <input
+          type="text"
+          class="form-control"
+          id="titre"
+          name="titre"
+          [(ngModel)]="titre"
+          placeholder="Saisir le titre"
+          required
+        />
+      </div>
+
+      <div class="form-group mt-3">
+        <label for="mots_cles">Mots clés</label>
+        <input
+          type="text"
+          class="form-control"
+          id="mots_cles"
+          name="mots_cles"
+          [(ngModel)]="mots_cles"
+          placeholder="Ex : IA, sécurité, vision"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Partie droite : domaine -->
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="domaine_id">ID du Domaine</label>
+        <input
+          type="number"
+          class="form-control"
+          id="domaine_id"
+          name="domaine_id"
+          [(ngModel)]="domaine_id"
+          placeholder="1, 2, 3..."
+          required
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Boutons -->
+  <div class="mt-4">
+    <button
+      type="submit"
+      class="btn btn-success"
+      [disabled]="!articleForm.valid"
+    >
+      Publier l'article
+    </button>
+
+    <button type="button" class="btn btn-danger ms-3" (click)="logout()">
+      Déconnexion
+    </button>
+  </div>
+</form>
