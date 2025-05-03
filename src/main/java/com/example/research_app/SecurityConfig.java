@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll() // Autorise tout sur /auth/
                 .requestMatchers(HttpMethod.GET, "/api/articles/**").permitAll() 
                 .requestMatchers("/api/articles/**").hasAnyRole("ADMIN", "CONTRIBUTOR") 
+                .requestMatchers("/api/contributions/**").permitAll()
                 .requestMatchers("/api/users/me").hasAnyRole("USER", "ADMIN") // Accès au profil personnel autorisé
                 .requestMatchers("/api/users/**").hasRole("ADMIN") // CRUD utilisateurs réservé à l'admin
                 .anyRequest().authenticated()
