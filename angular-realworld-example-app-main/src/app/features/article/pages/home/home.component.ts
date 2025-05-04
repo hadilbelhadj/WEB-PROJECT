@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { TagsService } from "../../services/tags.service";
 import { ArticleListConfig } from "../../models/article-list-config.model";
 import { AsyncPipe, NgClass, NgForOf } from "@angular/common";
@@ -21,6 +21,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     RxLet,
     NgForOf,
     IfAuthenticatedDirective,
+    RouterLink,
   ],
   standalone: true,
 })
@@ -35,6 +36,44 @@ export default class HomeComponent implements OnInit {
     .pipe(tap(() => (this.tagsLoaded = true)));
   tagsLoaded = false;
   destroyRef = inject(DestroyRef);
+
+  sampleArticles = [
+    {
+      id: 9001,
+      slug: "angular-architecture",
+      titre: "Mastering Angular Architecture",
+      description: "A deep dive into scalable component-driven architecture.",
+      tagList: ["Angular", "Architecture", "BestPractices"],
+    },
+    {
+      id: 9002,
+      slug: "rxjs-streams",
+      titre: "Understanding RxJS Streams",
+      description: "Reactive programming made simple with real examples.",
+      tagList: ["RxJS", "Observables", "Streams"],
+    },
+    {
+      id: 9003,
+      slug: "forms-guide",
+      titre: "Forms in Angular: Reactive vs Template",
+      description: "Learn the pros and cons of both approaches.",
+      tagList: ["Forms", "ReactiveForms", "UX"],
+    },
+    {
+      id: 9004,
+      slug: "routing-deepdive",
+      titre: "Angular Routing Deep Dive",
+      description: "Everything you need to know about Angular router.",
+      tagList: ["Routing", "Guards", "LazyLoading"],
+    },
+    {
+      id: 9005,
+      slug: "performance-boost",
+      titre: "Boosting Angular Performance",
+      description: "Tips to make your Angular app blazing fast.",
+      tagList: ["Performance", "Optimization", "Angular"],
+    },
+  ];
 
   constructor(
     private readonly router: Router,
@@ -59,13 +98,11 @@ export default class HomeComponent implements OnInit {
   }
 
   setListTo(type: string = "", filters: Object = {}): void {
-    // If feed is requested but user is not authenticated, redirect to login
     if (type === "feed" && !this.isAuthenticated) {
       void this.router.navigate(["/login"]);
       return;
     }
 
-    // Otherwise, set the list object
     this.listConfig = { type: type, filters: filters };
   }
 }

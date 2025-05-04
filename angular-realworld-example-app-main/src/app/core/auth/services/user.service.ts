@@ -39,25 +39,21 @@ export class UserService {
   }
 
   register(credentials: {
-    username: string;
+    nom: string;
     email: string;
     password: string;
-  }): Observable<{ token: string }> {
+    grade: string;
+  }): Observable<User> {
     return this.http
-      .post<{ token: string }>("http://localhost:8080/auth/login", credentials)
+      .post<User>("http://localhost:8080/api/users", credentials)
       .pipe(
-        tap((response) => {
-          this.jwtService.saveToken(response.token);
-          this.getCurrentUser().subscribe({
-            next: () => {
-              const role = this.jwtService.getCurrentRole();
-              this.redirectBasedOnRole(role);
-            },
-            error: () => this.purgeAuth()
-          });
+        tap((user) => {
+          this.setAuth(user); // Save token if returned in response
+          this.redirectBasedOnRole(user.role); // redirect based on backend user role
         })
       );
   }
+  
 
   logout(): void {
     this.purgeAuth();

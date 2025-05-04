@@ -15,7 +15,8 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 interface AuthForm {
   email: FormControl<string>;
   password: FormControl<string>;
-  username?: FormControl<string>;
+  nom?: FormControl<string>;
+  grade?: FormControl<string>; // Added grade
 }
 
 @Component({
@@ -54,7 +55,14 @@ export default class AuthComponent implements OnInit {
     this.title = this.authType === "login" ? "Sign in" : "Sign up";
     if (this.authType === "register") {
       this.authForm.addControl(
-        "username",
+        "nom",
+        new FormControl("", {
+          validators: [Validators.required],
+          nonNullable: true,
+        }),
+      );
+      this.authForm.addControl(
+        "grade",
         new FormControl("", {
           validators: [Validators.required],
           nonNullable: true,
@@ -76,19 +84,19 @@ export default class AuthComponent implements OnInit {
             this.authForm.value as {
               email: string;
               password: string;
-              username: string;
+              nom: string;
+              grade: string; // include grade in register
             },
           );
 
-// Modifier uniquement la partie next du subscribe:
-observable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-  next: () => {
-    // La redirection est maintenant gérée dans le UserService
-  },
-  error: (err) => {
-    this.errors = err;
-    this.isSubmitting = false;
-  },
-});
+    observable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => {
+        // Redirection handled in UserService
+      },
+      error: (err) => {
+        this.errors = err;
+        this.isSubmitting = false;
+      },
+    });
   }
 }

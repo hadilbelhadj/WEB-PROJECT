@@ -10,10 +10,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -23,21 +23,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
         http
-            .cors(withDefaults()) // Active CORS avec configuration par défaut
-            .csrf(csrf -> csrf.disable()) // Désactive CSRF pour les API REST
+            .cors(withDefaults())
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll() // Autorise tout sur /auth/
-                .requestMatchers(HttpMethod.GET, "/api/articles/**").permitAll() 
-                .requestMatchers("/api/articles/**").hasAnyRole("ADMIN", "CONTRIBUTOR") 
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/users").permitAll() // ✅ allow sign-up
+                .requestMatchers(HttpMethod.GET, "/api/articles/**").permitAll()
+                .requestMatchers("/api/articles/**").hasAnyRole("ADMIN", "CONTRIBUTOR")
                 .requestMatchers("/api/contributions/**").permitAll()
-                .requestMatchers("/api/users/me").hasAnyRole("USER", "ADMIN") // Accès au profil personnel autorisé
-                .requestMatchers("/api/users/**").hasRole("ADMIN") // CRUD utilisateurs réservé à l'admin
+                .requestMatchers("/api/users/me").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/api/users/**").hasRole("ADMIN") // keep admin-only for other routes
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            .httpBasic(withDefaults()); // Permet l'authentification basique (temporaire)
+            .httpBasic(withDefaults());
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -50,6 +51,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // NE PAS UTILISER EN PROD
+        return new BCryptPasswordEncoder(); // ✅ use secure password hashing
     }
 }

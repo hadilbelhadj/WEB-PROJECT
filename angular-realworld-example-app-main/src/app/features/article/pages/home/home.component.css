@@ -1,7 +1,22 @@
-.nav-link {
-  cursor: pointer;
+.article-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.tag-pill {
-  cursor: pointer;
+.article-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 1rem 2rem rgba(46, 125, 50, 0.1);
+}
+
+.article-grid h4 {
+  font-weight: 600;
+}
+
+.badge {
+  font-size: 0.75rem;
+  padding: 0.4em 0.65em;
+  border-radius: 0.5rem;
+}
+
+.text-success-emphasis {
+  color: #2e7d32;
 }

@@ -49,6 +49,12 @@ export class ArticlesService {
       })
       .pipe(map((data) => data.article));
   }
+  getAll(): Observable<Article[]> {
+    return this.http
+      .get<{ articles: Article[] }>("/api/articles")
+      .pipe(map(response => response.articles));
+  }
+  
 
   favorite(slug: string): Observable<Article> {
     return this.http
